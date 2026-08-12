@@ -35,7 +35,7 @@ export async function POST(request: Request) {
   const resend = new Resend(apiKey);
 
   const { error } = await resend.emails.send({
-    from: "StateNext Labs Booking <onboarding@resend.dev>",
+    from: "StateNext Labs Booking <booking@mail.gostatenext.com>",
     to: NOTIFY_EMAIL,
     replyTo: email,
     subject: `New appointment request: ${reason} — ${date} at ${time}`,
