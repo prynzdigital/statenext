@@ -1,0 +1,61 @@
+<svg width="1800" height="1400" viewBox="0 0 1800 1400" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="base" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f7f8fb" />
+      <stop offset="45%" stop-color="#eef1f6" />
+      <stop offset="100%" stop-color="#e9edf4" />
+    </linearGradient>
+
+    <radialGradient id="glowRed" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#e8262f" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#e8262f" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="glowNavy" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#3a5590" stop-opacity="0.16" />
+      <stop offset="100%" stop-color="#3a5590" stop-opacity="0" />
+    </radialGradient>
+
+    <radialGradient id="glowRedSoft" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#c0141c" stop-opacity="0.12" />
+      <stop offset="100%" stop-color="#c0141c" stop-opacity="0" />
+    </radialGradient>
+
+    <filter id="blurXl" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="90" />
+    </filter>
+    <filter id="blurLg" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="60" />
+    </filter>
+
+    <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse">
+      <circle cx="1.4" cy="1.4" r="1.4" fill="#0a1530" fill-opacity="0.05" />
+    </pattern>
+
+    <linearGradient id="ribbonFade" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1530" stop-opacity="0.06" />
+      <stop offset="100%" stop-color="#0a1530" stop-opacity="0.015" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1800" height="1400" fill="url(#base)" />
+  <rect width="1800" height="1400" fill="url(#dots)" />
+
+  <circle cx="1520" cy="180" r="380" fill="url(#glowRed)" filter="url(#blurXl)" />
+  <circle cx="120" cy="620" r="420" fill="url(#glowNavy)" filter="url(#blurXl)" />
+  <circle cx="1400" cy="1120" r="320" fill="url(#glowRedSoft)" filter="url(#blurLg)" />
+  <circle cx="480" cy="1300" r="300" fill="url(#glowNavy)" filter="url(#blurLg)" />
+  <circle cx="900" cy="700" r="260" fill="url(#glowNavy)" filter="url(#blurXl)" opacity="0.5" />
+
+  <g stroke="url(#ribbonFade)" stroke-width="70" stroke-linecap="round" fill="none" opacity="0.9">
+    <path d="M1180 120 C 1340 120 1430 210 1430 340 C 1430 450 1350 500 1250 540 L 980 660" />
+    <path d="M700 1180 C 540 1180 450 1090 450 960 C 450 850 530 800 630 760 L 900 640" />
+  </g>
+
+  <g stroke="#0a1530" stroke-opacity="0.04" stroke-width="1">
+    <line x1="0" y1="466" x2="1800" y2="466" />
+    <line x1="0" y1="933" x2="1800" y2="933" />
+    <line x1="600" y1="0" x2="600" y2="1400" />
+    <line x1="1200" y1="0" x2="1200" y2="1400" />
+  </g>
+</svg>
