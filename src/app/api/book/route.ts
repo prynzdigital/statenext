@@ -34,31 +34,56 @@ export async function POST(request: Request) {
 
   const resend = new Resend(apiKey);
 
-  const { error } = await resend.emails.send({
-    from: "StateNext Labs Booking <booking@mail.gostatenext.com>",
-    to: NOTIFY_EMAIL,
-    replyTo: email,
-    subject: `New appointment request: ${reason} — ${date} at ${time}`,
-    text: [
-      `Reason: ${reason}`,
-      `Date: ${date}`,
-      `Time: ${time} (Central)`,
-      "",
-      `Name: ${name}`,
-      `Email: ${email}`,
-      `Phone: ${phone || "—"}`,
-      "",
-      "Notes:",
-      notes || "—",
-    ].join("\n"),
-  });
+  const [notifyResult, confirmationResult] = await Promise.all([
+    resend.emails.send({
+      from: "StateNext Labs Booking <booking@mail.gostatenext.com>",
+      to: NOTIFY_EMAIL,
+      replyTo: email,
+      subject: `New appointment request: ${reason} — ${date} at ${time}`,
+      text: [
+        `Reason: ${reason}`,
+        `Date: ${date}`,
+        `Time: ${time} (Central)`,
+        "",
+        `Name: ${name}`,
+        `Email: ${email}`,
+        `Phone: ${phone || "—"}`,
+        "",
+        "Notes:",
+        notes || "—",
+      ].join("\n"),
+    }),
+    resend.emails.send({
+      from: "StateNext Labs <booking@mail.gostatenext.com>",
+      to: email,
+      replyTo: NOTIFY_EMAIL,
+      subject: `We've received your appointment request — ${date} at ${time}`,
+      text: [
+        `Hi ${name},`,
+        "",
+        "Thanks for reaching out to StateNext Labs. We've received your appointment request and will confirm within one business day.",
+        "",
+        `Reason: ${reason}`,
+        `Requested date: ${date}`,
+        `Requested time: ${time} (Central)`,
+        "",
+        "If anything changes on your end, just reply to this email.",
+        "",
+        "— StateNext Labs",
+      ].join("\n"),
+    }),
+  ]);
 
-  if (error) {
-    console.error("Resend error:", error);
+  if (notifyResult.error) {
+    console.error("Resend error (notify):", notifyResult.error);
     return NextResponse.json(
       { error: "Failed to send notification email." },
       { status: 502 }
     );
+  }
+
+  if (confirmationResult.error) {
+    console.error("Resend error (confirmation):", confirmationResult.error);
   }
 
   return NextResponse.json({ ok: true });
