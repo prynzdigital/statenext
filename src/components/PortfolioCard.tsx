@@ -10,6 +10,7 @@ export type PortfolioItem = {
   name: string;
   url?: string;
   href?: string;
+  noLink?: boolean;
   category: string;
   description: string;
   image?: string;
@@ -70,7 +71,7 @@ export default function PortfolioCard({
           <p className="mt-2 text-sm leading-relaxed text-navy-700">
             {item.description}
           </p>
-          {(item.href || item.url) && (
+          {!item.noLink && (item.href || item.url) && (
             <a
               href={item.href ?? `https://${item.url}`}
               target="_blank"

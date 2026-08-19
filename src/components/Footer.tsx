@@ -119,7 +119,7 @@ export default function Footer() {
           <div>
             <Link href="/" className="flex items-center gap-2.5">
               <Image
-                src="/statenext-logo.png"
+                src="/logo-white.png"
                 alt="StateNext Labs"
                 width={56}
                 height={56}

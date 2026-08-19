@@ -60,6 +60,23 @@ const PROJECTS: PortfolioItem[] = [
       "A corporate site for a construction contractor in Mauritius, built to showcase their services and drive free-consultation requests.",
     image: "/pronovac.png",
   },
+  {
+    name: "Eclean Pro Services",
+    url: "ecleanproservices.com",
+    category: "Home & Commercial Services",
+    description:
+      "A booking and quoting site for an Illinois cleaning company, with a price calculator and online scheduling built around commercial and residential contracts.",
+    image: "/eclean.png",
+  },
+  {
+    name: "E-Clean Admin Dashboard",
+    url: "E-Clean Admin Portal",
+    noLink: true,
+    category: "Custom CRM & Business Management",
+    description:
+      "An internal operations dashboard built for Eclean Pro Services, tracking leads, quotes, contracts, jobs, invoicing, and team scheduling in one place.",
+    image: "/dashboard.png",
+  },
 ];
 
 export default function WorkPage() {

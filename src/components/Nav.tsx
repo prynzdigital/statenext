@@ -86,15 +86,11 @@ export default function Nav() {
       <nav className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
         <Link href="/" className="flex items-center gap-2.5">
           <Image
-            src="/statenext-logo.png"
+            src={overDarkHero ? "/logo-white.png" : "/statenext-logo.png"}
             alt="StateNext Labs"
             width={64}
             height={64}
-            className={`h-9 w-9 transition-[filter] ${
-              overDarkHero
-                ? "drop-shadow-[0_0_10px_rgba(255,255,255,0.6)]"
-                : ""
-            }`}
+            className="h-9 w-9"
             priority
           />
           <BrandWordmark tone={overDarkHero ? "light" : "dark"} />

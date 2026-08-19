@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import Reveal from "./Reveal";
 import { useTiltHandlers } from "@/hooks/useTilt";
 import { GLASS, CARD_SHADOW, CARD_SHADOW_HOVER } from "@/lib/glass";
@@ -10,31 +11,37 @@ const SERVICES = [
     title: "Custom Software Development",
     description:
       "Web and internal applications built around how your teams actually work, from first prototype to production.",
+    image: "/development.png",
   },
   {
     title: "Digital Modernization",
     description:
       "We replace legacy tools and manual processes with modern, maintainable systems without disrupting the business.",
+    image: "/digital.png",
   },
   {
     title: "Process Automation",
     description:
       "We identify repetitive, error-prone work and automate it so your people can focus on higher-value decisions.",
+    image: "/automation.png",
   },
   {
     title: "Cloud & Infrastructure",
     description:
       "Secure, scalable infrastructure and DevOps practices that grow with usage instead of breaking under it.",
+    image: "/cloud.png",
   },
   {
     title: "Data & Analytics",
     description:
       "Clean data pipelines and dashboards that turn scattered operational data into decisions you can act on.",
+    image: "/analytics.png",
   },
   {
     title: "Ongoing Support",
     description:
       "Monitoring, maintenance, and iteration after launch, so the systems we build keep pace with your organization.",
+    image: "/support.png",
   },
 ];
 
@@ -56,17 +63,28 @@ function ServiceCard({
         ref={cardRef}
         onMouseMove={tilt.onMouseMove}
         onMouseLeave={tilt.onMouseLeave}
-        className={`${GLASS} ${CARD_SHADOW} ${CARD_SHADOW_HOVER} group h-full rounded-2xl p-7 transition-[background-color,box-shadow,transform] duration-300 ease-out hover:bg-white/80`}
+        className={`${GLASS} ${CARD_SHADOW} ${CARD_SHADOW_HOVER} group h-full overflow-hidden rounded-2xl transition-[background-color,box-shadow,transform] duration-300 ease-out hover:bg-white/80`}
       >
-        <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-red-600 text-sm font-bold text-white">
-          {String(index + 1).padStart(2, "0")}
-        </span>
-        <h3 className="mt-5 text-lg font-semibold text-navy-900">
-          {service.title}
-        </h3>
-        <p className="mt-2.5 text-sm leading-relaxed text-navy-700">
-          {service.description}
-        </p>
+        <div className="relative aspect-[4/3] overflow-hidden">
+          <Image
+            src={service.image}
+            alt={service.title}
+            fill
+            className="object-cover transition-transform duration-500 ease-out group-hover:scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-navy-950/50 via-navy-950/0 to-navy-950/0" />
+          <span className="absolute left-4 top-4 flex h-10 w-10 items-center justify-center rounded-lg bg-red-600 text-sm font-bold text-white shadow-lg shadow-navy-950/30">
+            {String(index + 1).padStart(2, "0")}
+          </span>
+        </div>
+        <div className="p-7">
+          <h3 className="text-lg font-semibold text-navy-900">
+            {service.title}
+          </h3>
+          <p className="mt-2.5 text-sm leading-relaxed text-navy-700">
+            {service.description}
+          </p>
+        </div>
       </div>
     </Reveal>
   );
