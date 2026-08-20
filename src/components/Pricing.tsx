@@ -4,7 +4,9 @@ import { GLASS, CARD_SHADOW, CARD_SHADOW_HOVER, CTA_SHADOW } from "@/lib/glass";
 const TIERS = [
   {
     name: "Starter",
-    tagline: "For a single, focused project",
+    price: "$2,500",
+    priceNote: "starting price, per project",
+    tagline: "A single site or focused feature build",
     highlighted: false,
     features: [
       { label: "Discovery call", included: true },
@@ -17,7 +19,9 @@ const TIERS = [
   },
   {
     name: "Growth",
-    tagline: "For ongoing product development",
+    price: "$6,500",
+    priceNote: "starting price, per project",
+    tagline: "A larger build with an ongoing team",
     highlighted: true,
     features: [
       { label: "Everything in Starter", included: true },
@@ -30,7 +34,9 @@ const TIERS = [
   },
   {
     name: "Enterprise",
-    tagline: "For complex, multi-system engagements",
+    price: "$15,000+",
+    priceNote: "starting price, scoped to fit",
+    tagline: "Custom software and multi-system builds",
     highlighted: false,
     features: [
       { label: "Everything in Growth", included: true },
@@ -56,8 +62,8 @@ export default function Pricing() {
           </h2>
           <p className="mt-4 text-lg leading-relaxed text-navy-700">
             Every engagement is quoted after a short discovery call, based on
-            scope rather than a generic seat price. Here&apos;s roughly where
-            most projects land.
+            scope rather than a generic seat price. Here&apos;s what most
+            projects start at.
           </p>
         </Reveal>
 
@@ -74,6 +80,12 @@ export default function Pricing() {
                 >
                   <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
                     {tier.name}
+                  </p>
+                  <p className="font-display mt-3 text-4xl font-bold text-white">
+                    {tier.price}
+                  </p>
+                  <p className="mt-1 text-xs text-white/60">
+                    {tier.priceNote}
                   </p>
                   <p className="mt-3 px-6 text-sm text-white/80">
                     {tier.tagline}
