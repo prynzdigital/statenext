@@ -16,13 +16,20 @@ const TIME_SLOTS = [
   "9:00 AM",
   "10:00 AM",
   "11:00 AM",
+  "12:00 PM",
   "1:00 PM",
   "2:00 PM",
   "3:00 PM",
   "4:00 PM",
+  "5:00 PM",
 ];
 
-const WEEKDAY_LABEL = new Intl.DateTimeFormat("en-US", { weekday: "short" });
+const WEEKDAY_SHORT = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+const MONTH_YEAR_LABEL = new Intl.DateTimeFormat("en-US", {
+  month: "long",
+  year: "numeric",
+});
 const MONTH_DAY_LABEL = new Intl.DateTimeFormat("en-US", {
   month: "short",
   day: "numeric",
@@ -33,24 +40,46 @@ const FULL_DATE_LABEL = new Intl.DateTimeFormat("en-US", {
   day: "numeric",
 });
 
-function getUpcomingBusinessDays(count: number): Date[] {
-  const days: Date[] = [];
-  const cursor = new Date();
-  cursor.setHours(0, 0, 0, 0);
-  cursor.setDate(cursor.getDate() + 1);
+function startOfDay(d: Date): Date {
+  const copy = new Date(d);
+  copy.setHours(0, 0, 0, 0);
+  return copy;
+}
+function startOfMonth(d: Date): Date {
+  return new Date(d.getFullYear(), d.getMonth(), 1);
+}
+function addMonths(d: Date, n: number): Date {
+  return new Date(d.getFullYear(), d.getMonth() + n, 1);
+}
+function addDays(d: Date, n: number): Date {
+  const copy = new Date(d);
+  copy.setDate(copy.getDate() + n);
+  return copy;
+}
+function isSameDay(a: Date, b: Date): boolean {
+  return a.toDateString() === b.toDateString();
+}
+function isWeekday(d: Date): boolean {
+  const day = d.getDay();
+  return day !== 0 && day !== 6;
+}
+function buildCalendarGrid(viewMonth: Date): Date[] {
+  const first = startOfMonth(viewMonth);
+  const gridStart = addDays(first, -first.getDay());
+  return Array.from({ length: 42 }, (_, i) => addDays(gridStart, i));
+}
 
-  while (days.length < count) {
-    const day = cursor.getDay();
-    if (day !== 0 && day !== 6) {
-      days.push(new Date(cursor));
-    }
-    cursor.setDate(cursor.getDate() + 1);
-  }
-  return days;
+const TODAY = startOfDay(new Date());
+const MIN_BOOKABLE_DATE = addDays(TODAY, 1);
+const MAX_BOOKABLE_DATE = addDays(TODAY, 90);
+
+function isBookable(d: Date): boolean {
+  return isWeekday(d) && d >= MIN_BOOKABLE_DATE && d <= MAX_BOOKABLE_DATE;
 }
 
 export default function AppointmentBooking() {
-  const businessDays = useMemo(() => getUpcomingBusinessDays(10), []);
+  const [viewMonth, setViewMonth] = useState(() => startOfMonth(TODAY));
+  const grid = useMemo(() => buildCalendarGrid(viewMonth), [viewMonth]);
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -61,6 +90,9 @@ export default function AppointmentBooking() {
   const [notes, setNotes] = useState("");
   const [requested, setRequested] = useState(false);
   const [status, setStatus] = useState<"idle" | "sending" | "error">("idle");
+
+  const canGoPrevMonth = viewMonth > startOfMonth(TODAY);
+  const canGoNextMonth = viewMonth < startOfMonth(MAX_BOOKABLE_DATE);
 
   const isComplete = Boolean(selectedDate && selectedTime && name && email);
 
@@ -186,34 +218,74 @@ export default function AppointmentBooking() {
             <form onSubmit={handleSubmit}>
               <div className="space-y-6">
                 <div>
-                  <label className="text-sm font-medium text-navy-900/80">
-                    Choose a date
-                  </label>
-                  <div className="mt-2 flex gap-2 overflow-x-auto pb-1">
-                    {businessDays.map((date) => {
+                  <div className="flex items-center justify-between">
+                    <label className="text-sm font-medium text-navy-900/80">
+                      Choose a date
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <button
+                        type="button"
+                        disabled={!canGoPrevMonth}
+                        onClick={() => setViewMonth((m) => addMonths(m, -1))}
+                        aria-label="Previous month"
+                        className="flex h-7 w-7 items-center justify-center rounded-md border border-navy-900/15 text-navy-900 transition-colors hover:border-red-500/50 disabled:cursor-not-allowed disabled:opacity-30"
+                      >
+                        &#8249;
+                      </button>
+                      <span className="min-w-[9.5rem] text-center text-xs font-semibold uppercase tracking-wide text-navy-900/60">
+                        {MONTH_YEAR_LABEL.format(viewMonth)}
+                      </span>
+                      <button
+                        type="button"
+                        disabled={!canGoNextMonth}
+                        onClick={() => setViewMonth((m) => addMonths(m, 1))}
+                        aria-label="Next month"
+                        className="flex h-7 w-7 items-center justify-center rounded-md border border-navy-900/15 text-navy-900 transition-colors hover:border-red-500/50 disabled:cursor-not-allowed disabled:opacity-30"
+                      >
+                        &#8250;
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 grid grid-cols-7 gap-1 text-center">
+                    {WEEKDAY_SHORT.map((w) => (
+                      <span
+                        key={w}
+                        className="text-[10px] font-semibold uppercase tracking-wide text-navy-900/40"
+                      >
+                        {w}
+                      </span>
+                    ))}
+                    {grid.map((date) => {
+                      const inMonth = date.getMonth() === viewMonth.getMonth();
+                      const bookable = inMonth && isBookable(date);
                       const isSelected =
-                        selectedDate?.toDateString() === date.toDateString();
+                        selectedDate && isSameDay(date, selectedDate);
+                      const isToday = isSameDay(date, TODAY);
+
                       return (
                         <button
                           key={date.toISOString()}
                           type="button"
-                          onClick={() => setSelectedDate(date)}
-                          className={`flex flex-shrink-0 flex-col items-center rounded-xl border px-3.5 py-2.5 text-center transition-colors ${
-                            isSelected
-                              ? "border-red-600 bg-red-600 text-white"
-                              : "border-navy-900/15 bg-navy-900/5 text-navy-900 hover:border-red-500/50"
+                          disabled={!bookable}
+                          onClick={() => {
+                            setSelectedDate(date);
+                            setSelectedTime(null);
+                          }}
+                          className={`relative aspect-square rounded-lg text-xs font-semibold transition-colors ${
+                            !inMonth
+                              ? "text-navy-900/15"
+                              : !bookable
+                              ? "cursor-not-allowed text-navy-900/25"
+                              : isSelected
+                              ? "bg-red-600 text-white"
+                              : "text-navy-900 hover:bg-navy-900/5"
                           }`}
                         >
-                          <span
-                            className={`text-[11px] font-semibold uppercase tracking-wide ${
-                              isSelected ? "text-white/80" : "text-navy-900/50"
-                            }`}
-                          >
-                            {WEEKDAY_LABEL.format(date)}
-                          </span>
-                          <span className="text-sm font-semibold">
-                            {MONTH_DAY_LABEL.format(date)}
-                          </span>
+                          {date.getDate()}
+                          {isToday && !isSelected && (
+                            <span className="absolute bottom-1 left-1/2 h-1 w-1 -translate-x-1/2 rounded-full bg-red-500" />
+                          )}
                         </button>
                       );
                     })}
