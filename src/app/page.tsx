@@ -5,7 +5,6 @@ import CTABanner from "@/components/CTABanner";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import Testimonials from "@/components/Testimonials";
 import About from "@/components/About";
-import Team from "@/components/Team";
 import Pricing from "@/components/Pricing";
 import ClientLogos from "@/components/ClientLogos";
 import FAQ from "@/components/FAQ";
@@ -24,13 +23,12 @@ export default function Home() {
           heading="Support that doesn't stop at launch"
           description="Most vendors disappear after handoff. We stay on to monitor, maintain, and iterate, so the system keeps working as your organization grows."
           image="/ai.jpg"
-          secondaryLabel="Meet the Team"
-          secondaryHref="#team"
+          secondaryLabel="View Pricing"
+          secondaryHref="#pricing"
         />
         <WhyChooseUs />
         <About />
         <Testimonials />
-        <Team />
         <Pricing />
         <ClientLogos />
         <FAQ />
