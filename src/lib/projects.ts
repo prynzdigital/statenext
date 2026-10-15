@@ -51,6 +51,14 @@ export const PROJECTS: PortfolioItem[] = [
     image: "/pronovac.png",
   },
   {
+    name: "Interiors by JanLee",
+    url: "interiorsbyjanlee.com",
+    category: "Interior Design",
+    description:
+      "A portfolio and consultation site for a Colorado Springs interior designer, built around featured room transformations and consultation bookings.",
+    image: "/JanLee-Screenshot.png",
+  },
+  {
     name: "Eclean Pro Services",
     url: "ecleanproservices.com",
     category: "Home & Commercial Services",
